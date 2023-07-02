@@ -30,7 +30,26 @@ function processLayers(layers) {
                 var textItem = layers[j].textItem;
                 var originalText = textItem.contents;
                 var convertedText = convertText(originalText);
-                textItem.contents = convertedText;
+
+                // 保存字符属性方式
+                var characterStyle = textItem.characterStyle;
+                var paragraphStyle = textItem.paragraphStyle;
+                var warpStyle = textItem.warpStyle;
+                var baseline = textItem.baseline;
+                var tsume = textItem.tsume;
+
+                textItem.contents = convertedText.replace(/\n/g, '\r'); // 需要修改换行符，否则乱码
+                // var visibleText = convertedText.replace(/\n/g, '\\n');  // 检查换行符
+                // logFile.writeln(visibleText)
+
+                // 设置字符属性
+                textItem.characterStyle = characterStyle;
+                textItem.paragraphStyle = paragraphStyle;
+                textItem.warpStyle = warpStyle;
+                textItem.baseline = baseline;
+                textItem.tsume = tsume;
+
+
             } else if (layers[j].typename == "LayerSet") {
                 processLayers(layers[j].layers);
             }
