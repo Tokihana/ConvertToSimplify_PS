@@ -30,21 +30,41 @@ function processLayers(layers) {
                 var textItem = layers[j].textItem;
                 var originalText = textItem.contents;
 
-                // 存储字符属性
-                var characterStyle = textItem.characterStyle;
-                var paragraphStyle = textItem.paragraphStyle;
-                var warpStyle = textItem.warpStyle;
+                // 获取文本样式范围信息
+                var s2t = stringIDToTypeID;
+                (r = new ActionReference()).putProperty(s2t('property'), p = s2t('textKey'));
+                r.putIdentifier(stringIDToTypeID("layer"), layers[j].id);
+
+                var item = executeActionGet(r).getObjectValue(p);
+                var textStyleRangeList = item.getList(stringIDToTypeID("textStyleRange"));
+
+                var textRanges = [];
+                for (var i = 0; i < textStyleRangeList.count; i++) {
+                    // 获取当前文本样式范围的ActionDescriptor对象
+                    var rangeDesc = textStyleRangeList.getObjectValue(i);
+                    textRanges.push({
+                        from: rangeDesc.getInteger(s2t("from")),
+                        to: rangeDesc.getInteger(s2t("to")),
+                        textStyle: rangeDesc.getObjectValue(s2t("textStyle"))
+                    });
+                }
 
                 // 繁转简
                 var convertedText = convertText(originalText);
-                textItem.contents = convertedText.replace(/\n/g, '\r'); // 需要修改换行符，否则乱码
+                // textItem.contents = convertedText.replace(/\n/g, '\r'); // 需要修改换行符，否则乱码
                 // var visibleText = convertedText.replace(/\n/g, '\\n');  // 检查换行符
                 // logFile.writeln(visibleText)
 
                 // 设置字符属性
-                textItem.characterStyle = characterStyle;
-                textItem.paragraphStyle = paragraphStyle
-                textItem.warpStyle = warpStyle;
+                // 更新文本图层的ActionDescriptor对象
+                item.putList(s2t("textStyleRange"), textStyleRangeList);
+                item.putString(s2t("textKey"), convertedText.replace(/\n/g, '\r'));
+                (r = new ActionReference()).putIdentifier(s2t('layer'), layers[j].id);
+                (d = new ActionDescriptor()).putReference(s2t('target'), r);
+                d.putObject(s2t('to'), s2t('textLayer'), item);
+
+                // 应用新的文本样式范围信息
+                executeAction(s2t("set"), d, DialogModes.NO);
                 
             } else if (layers[j].typename == "LayerSet") {
                 processLayers(layers[j].layers);
