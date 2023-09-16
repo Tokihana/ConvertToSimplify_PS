@@ -89,8 +89,9 @@ function convertText(text) {
     var command = pythonPath + ' "' + scriptPath + '" "' + inputFilePath + '" "' + outputFilePath + '" "' + logFilePath + '"';
     logFile.writeln("Running command: " + command);
     // logFile.writeln(Folder.current.fsName);
-    //app.system(command);
-    system(command);
+    var callback = system(command);
+    if (callback != 0)
+        logFile.writeln("Faild to run python command, callback: " + callback);
 
     // 读取输出文件
     var outputFile = new File(outputFilePath);
