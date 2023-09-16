@@ -1,7 +1,8 @@
 var scriptFilePath = $.fileName; // .js位置
 var scriptFolder = new File(scriptFilePath).parent.fsName; // .js文件夹
-var pythonPath = scriptFolder + "\\py3.9\\Scripts\\python.exe";
-var scriptPath = scriptFolder + "\\OpenCC_script.py";
+//var pythonPath = scriptFolder + "\\py3.9\\Scripts\\python.exe";
+//var scriptPath = scriptFolder + "\\OpenCC_script.py";
+var scriptPath = scriptFolder + "\\OpenCC_script.exe"
 // get psd files
 var inputFolder = Folder.selectDialog("选择包含PSD文件的文件夹");
 var fileList = inputFolder.getFiles("*.psd");
@@ -86,7 +87,8 @@ function convertText(text) {
     inputFile.close();
 
     // 运行 Python 脚本
-    var command = pythonPath + ' "' + scriptPath + '" "' + inputFilePath + '" "' + outputFilePath + '" "' + logFilePath + '"';
+    //var command = pythonPath + ' "' + scriptPath + '" "' + inputFilePath + '" "' + outputFilePath + '" "' + logFilePath + '"';
+    var command = scriptPath + ' "' + inputFilePath + '" "' + outputFilePath + '" "' + logFilePath + '"';
     logFile.writeln("Running command: " + command);
     // logFile.writeln(Folder.current.fsName);
     var callback = system(command);
