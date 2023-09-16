@@ -1,7 +1,8 @@
 var scriptFilePath = $.fileName; // .js位置
 var scriptFolder = new File(scriptFilePath).parent.fsName; // .js文件夹
-var pythonPath = scriptFolder + "\\py3.9\\Scripts\\python.exe";
-var scriptPath = scriptFolder + "\\OpenCC_script.py";
+//var pythonPath = scriptFolder + "\\py3.9\\Scripts\\python.exe";
+//var scriptPath = scriptFolder + "\\OpenCC_script.py";
+var scriptPath = scriptFolder + "\\OpenCC_script.exe"
 // get psd files
 var inputFolder = Folder.selectDialog("选择包含PSD文件的文件夹");
 var fileList = inputFolder.getFiles("*.psd");
@@ -51,9 +52,7 @@ function processLayers(layers) {
 
                 // 繁转简
                 var convertedText = convertText(originalText);
-                // textItem.contents = convertedText.replace(/\n/g, '\r'); // 需要修改换行符，否则乱码
                 // var visibleText = convertedText.replace(/\n/g, '\\n');  // 检查换行符
-                // logFile.writeln(visibleText)
 
                 // 设置字符属性
                 // 更新文本图层的ActionDescriptor对象
@@ -88,10 +87,13 @@ function convertText(text) {
     inputFile.close();
 
     // 运行 Python 脚本
-    var command = pythonPath + ' "' + scriptPath + '" "' + inputFilePath + '" "' + outputFilePath + '" "' + logFilePath + '"';
+    //var command = pythonPath + ' "' + scriptPath + '" "' + inputFilePath + '" "' + outputFilePath + '" "' + logFilePath + '"';
+    var command = scriptPath + ' "' + inputFilePath + '" "' + outputFilePath + '" "' + logFilePath + '"';
     logFile.writeln("Running command: " + command);
     // logFile.writeln(Folder.current.fsName);
-    app.system(command);
+    var callback = system(command);
+    if (callback != 0)
+        logFile.writeln("Faild to run python command, callback: " + callback);
 
     // 读取输出文件
     var outputFile = new File(outputFilePath);
