@@ -11,19 +11,19 @@ log_file_path = sys.argv[3]
 try:
     with open(log_file_path, 'a', encoding='utf-8') as f:
         f.write("Input: "+ input_file_path)
-    # ¶ÁÈ¡ÊäÈëÎÄ¼ş
+    # è¯»å–è¾“å…¥æ–‡ä»¶
     with open(input_file_path, 'r', encoding = "utf-8") as f:
         text = f.read()
         f.close()
 
-    # ×ª»»ÎÄ±¾ÄÚÈİ
+    # è½¬æ¢æ–‡æœ¬å†…å®¹
     converted_text = cc.convert(text)
 
-    # ½«×ª»»ºóµÄÎÄ±¾ÄÚÈİĞ´ÈëÊä³öÎÄ¼ş
+    # å°†è½¬æ¢åçš„æ–‡æœ¬å†…å®¹å†™å…¥è¾“å‡ºæ–‡ä»¶
     with open(output_file_path, 'w', encoding = "utf-8") as f:
         f.write(converted_text)
         f.close()
 except Exception as e:
-    # ½«´íÎóĞÅÏ¢Ğ´ÈëÈÕÖ¾ÎÄ¼ş
+    # å°†é”™è¯¯ä¿¡æ¯å†™å…¥æ—¥å¿—æ–‡ä»¶
     with open(log_file_path, 'a', encoding='utf-8') as f:
         f.write("Error while running Python script: " + str(e) + "\n")
