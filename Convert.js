@@ -51,9 +51,7 @@ function processLayers(layers) {
 
                 // 繁转简
                 var convertedText = convertText(originalText);
-                // textItem.contents = convertedText.replace(/\n/g, '\r'); // 需要修改换行符，否则乱码
                 // var visibleText = convertedText.replace(/\n/g, '\\n');  // 检查换行符
-                // logFile.writeln(visibleText)
 
                 // 设置字符属性
                 // 更新文本图层的ActionDescriptor对象
@@ -91,7 +89,8 @@ function convertText(text) {
     var command = pythonPath + ' "' + scriptPath + '" "' + inputFilePath + '" "' + outputFilePath + '" "' + logFilePath + '"';
     logFile.writeln("Running command: " + command);
     // logFile.writeln(Folder.current.fsName);
-    app.system(command);
+    //app.system(command);
+    system(command);
 
     // 读取输出文件
     var outputFile = new File(outputFilePath);
